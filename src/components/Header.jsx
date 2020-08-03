@@ -15,7 +15,7 @@ const Header = (props) => {
 				<SearchBar />
 			</div>
 			<div className="column column-20">
-				<p>User: </p>
+				<p>User: {props.user.fullName}</p>
 				<Cart count={props.cartCount} />
 			</div>
 		</div>

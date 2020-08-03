@@ -14,12 +14,14 @@ const Filters = ({ onReset, onChange, available, selected }) => {
 				filterKey="color"
 				filterValKey="color"
 				onSelect={onChange}
-				formatter={(value, label) => <>{label.toUpperCase()}<span className="colorPreview" style={{ backgroundColor: value }}></span></>} />
+				formatter={(value, label) => (<>
+					{label.toUpperCase()} <span className="colorPreview" style={{ backgroundColor: value }}></span>
+				</>)} />
 
 			<FilterCategory
 				label="Brand"
-				active={selected.brand || {}}
-				options={[{ title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 1", value: "brand 1" }, { title: "brand 2", value: "brand 2" }, { title: "brand 3", value: "brand 3" }]}
+				active={selected || {}}
+				options={available}
 				filterKey="brand"
 				filterValKey="brand"
 				onSelect={onChange} />

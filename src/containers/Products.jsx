@@ -4,6 +4,7 @@ import Filters from "../components/Filters";
 import ProductList from "../components/ProductList";
 import { applyFilters, getFilterValues } from "../util/ProductUtils"
 import xebia from "../api/xebia"
+import { connect } from 'react-redux';
 
 const initState = {
 	cartContents: {},
@@ -75,6 +76,16 @@ const productReducer = (state, action) => {
 		case "FETCH_PRODUCTS_FILTERS":
 			const colorFilters = getFilterValues(action.payload.filters, "COLOUR")
 			const productsById = action.payload.products.reduce((idMapper, prod) => ({ ...idMapper, [prod.id]: prod }), {})
+			const brandFilters = action.payload.products.reduce((filter, prod) => {
+				if (filter.brandSet.indexOf(prod.brand) < 0) {
+					filter.brandSet.push(prod.brand)
+					return {
+						...filter,
+						values: [...filter.values, { brand: prod.brand, title: prod.brand }]
+					}
+				}
+				return filter
+			}, { brandSet: [], values: [] })
 			return {
 				...state,
 				isLoading: false,
@@ -82,8 +93,9 @@ const productReducer = (state, action) => {
 				availableProdById: productsById,
 				filteredProd: action.payload.products,
 				availableProd: action.payload.products,
-				availableFilters: { color: colorFilters },
+				availableFilters: { color: colorFilters, brand: brandFilters.values },
 				selectedFilters: {
+					brand: {},
 					color: {} //initFilterValues(colorFilters, "color") 
 				}
 			}
@@ -98,18 +110,21 @@ const productReducer = (state, action) => {
 
 const ProductsContainer = (props) => {
 	const [state, dispatch] = useReducer(productReducer, initState)
+
 	const addToCart = (prodId) => dispatch({
 		type: "ADD_TO_CART",
 		payload: prodId
 	});
-	const setFilter = useCallback(({ filterType, filterName, set }) => {
+
+	const setFilter = useCallback(({ filterType, filterName }) => {
 		dispatch({
 			type: "SET_FILTER",
-			payload: { filterType, filterName, set }
+			payload: { filterType, filterName }
 		})
-	}
-	)
+	}, [])
+
 	const resetFilter = () => dispatch({ type: "RESET_FILTER" })
+
 	useEffect(() => {
 		// Mounting effect
 		const getProds = xebia.fetchProducts(); //fetch("http://localhost:9001/products")
@@ -133,9 +148,10 @@ const ProductsContainer = (props) => {
 				payload: `ERROR: ${error.toString()}`
 			}))
 	}, [])
+
 	return (
 		<div>
-			<Header cartCount={Object.keys(state.cartContents).length} />
+			<Header user={props.user} cartCount={Object.keys(state.cartContents).length} />
 			<input type="button" value="GET STATE" onClick={() => dispatch({ type: "GET_STATE" })} />
 			{state.error && <h3 className="error">{state.error}</h3>}
 			{state.isLoading ?
@@ -157,4 +173,8 @@ const ProductsContainer = (props) => {
 	)
 }
 
-export default (ProductsContainer);
+const mapState = (state) => ({
+	user: state.user
+})
+
+export default connect(mapState)(ProductsContainer);

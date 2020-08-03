@@ -4,7 +4,9 @@ const applyColorFilter = (prod, filters) => {
 }
 
 const applyBrandFilter = (prod, filters) => {
-	return true
+	if (!Object.keys(filters).length) return true
+	console.log(prod, filters)
+	return (prod.brand && Boolean(filters[prod.brand]))
 }
 
 export const applyFilters = (prods, filters) => {

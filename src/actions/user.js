@@ -19,7 +19,7 @@ export const loginUser = (formData) => dispatch => {
 		.then((response) => response.json())
 		.then((cred) => {
 			if (Array.isArray(cred))
-				return cred.length ? dispatch(setLogin(cred)) : dispatch(setLoginError("Invalid credentials"))
+				return cred.length ? dispatch(setLogin(cred[0])) : dispatch(setLoginError("Invalid credentials"))
 			else
 				return dispatch(setLoginError("Error while logging in"))
 		})

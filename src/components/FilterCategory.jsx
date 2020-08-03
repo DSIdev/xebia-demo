@@ -2,6 +2,7 @@ import React from 'react';
 
 const FilterCategory = ({ label, options, filterKey, filterValKey, onSelect, active, formatter }) => {
 	if (!(options && options[filterKey])) return null
+	console.log({ label, options, filterKey, filterValKey, onSelect, active, formatter })
 	return (
 		<div className="row">
 			<div className="column" style={{ border: "1px solid" }}>
